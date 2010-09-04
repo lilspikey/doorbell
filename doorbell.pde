@@ -9,7 +9,7 @@
 #define STATE_BELL_BACKWARD 3
 #define STATE_FINISH 4
 
-#define DOORBELL_THRESHOLD 50
+#define DOORBELL_THRESHOLD 5
 
 #define DOORBELL_INIT_ANGLE 70
 #define DOORBELL_BACKWARD_ANGLE 90
@@ -19,6 +19,7 @@ Servo servo;
 int state;
 unsigned long prev_millis;
 unsigned int duration;
+unsigned int start_count;
 unsigned int ring_count;
 unsigned int finish_count;
 
@@ -47,6 +48,7 @@ void loop() {
   if ( (millis() - prev_millis) > duration ) {
     switch(state) {
       case STATE_INIT_POSITION: {
+        start_count = 0;
         servo.write(DOORBELL_INIT_ANGLE);
         next_state(STATE_WAITING, 1000);
       }
@@ -54,13 +56,20 @@ void loop() {
       case STATE_WAITING: {
         int v = analogRead(DOORBELL_PIN);
         if ( v < DOORBELL_THRESHOLD ) {
-          // ensure servo attached again
-          servo.attach(SERVO_PIN);
-          ring_count = 3;
-          Serial.println("DING DONG");
-          next_state(STATE_BELL_FORWARD);
+          start_count++;
+          if ( start_count > 3 ) {
+            // ensure servo attached again
+            servo.attach(SERVO_PIN);
+            ring_count = 3;
+            Serial.println("DING DONG");
+            next_state(STATE_BELL_FORWARD);
+          }
+          else {
+            same_state();
+          }
         }
         else {
+          start_count = 0;
           if ( servo.attached() ) {
             // turn off servo
             // so to avoid buzzing from it being
