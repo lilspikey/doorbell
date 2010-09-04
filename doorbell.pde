@@ -3,13 +3,15 @@
 #define DOORBELL_PIN 5
 #define SERVO_PIN 9
 
+#define ANALOG_START 14
+
 #define STATE_INIT_POSITION 0
 #define STATE_WAITING 1
 #define STATE_BELL_FORWARD 2
 #define STATE_BELL_BACKWARD 3
 #define STATE_FINISH 4
 
-#define DOORBELL_THRESHOLD 5
+#define DOORBELL_THRESHOLD 400
 
 #define DOORBELL_INIT_ANGLE 70
 #define DOORBELL_BACKWARD_ANGLE 90
@@ -37,6 +39,9 @@ void same_state() {
 void setup() {
   Serial.begin(9600);
   servo.attach(SERVO_PIN);
+  // enable pullup resistor
+  pinMode(ANALOG_START + DOORBELL_PIN, INPUT);
+  digitalWrite(ANALOG_START + DOORBELL_PIN, HIGH);
   next_state(STATE_INIT_POSITION);
 }
 
@@ -55,9 +60,9 @@ void loop() {
       break;
       case STATE_WAITING: {
         int v = analogRead(DOORBELL_PIN);
-        if ( v < DOORBELL_THRESHOLD ) {
+        if ( v <= DOORBELL_THRESHOLD ) {
           start_count++;
-          if ( start_count > 3 ) {
+          if ( start_count > 2 ) {
             // ensure servo attached again
             servo.attach(SERVO_PIN);
             ring_count = 3;
