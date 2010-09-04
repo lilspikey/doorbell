@@ -11,7 +11,7 @@
 
 #define DOORBELL_THRESHOLD 50
 
-#define DOORBELL_INIT_ANGLE 75
+#define DOORBELL_INIT_ANGLE 70
 #define DOORBELL_BACKWARD_ANGLE 90
 #define DOORBELL_FORWARD_ANGLE 180
 
@@ -48,7 +48,7 @@ void loop() {
     switch(state) {
       case STATE_INIT_POSITION: {
         servo.write(DOORBELL_INIT_ANGLE);
-        next_state(STATE_WAITING, 500);
+        next_state(STATE_WAITING, 1000);
       }
       break;
       case STATE_WAITING: {
@@ -74,7 +74,7 @@ void loop() {
       case STATE_BELL_FORWARD: {
         if ( ring_count ) {
           servo.write(DOORBELL_FORWARD_ANGLE);
-          next_state(STATE_BELL_BACKWARD, 500);
+          next_state(STATE_BELL_BACKWARD, 600);
         }
         else {
           finish_count = 0;
@@ -85,7 +85,7 @@ void loop() {
       case STATE_BELL_BACKWARD: {
         servo.write(DOORBELL_BACKWARD_ANGLE);
         ring_count--;
-        next_state(STATE_BELL_FORWARD, 500);
+        next_state(STATE_BELL_FORWARD, 600);
       }
       break;
       case STATE_FINISH: {
