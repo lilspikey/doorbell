@@ -58,7 +58,12 @@ class PicoRendezvous(UDPServer):
       self.socket.bind(self.group)
     except:
       pass
-    self.socket.setsockopt(socket.SOL_IP, socket.IP_MULTICAST_IF, socket.inet_aton(socket.gethostbyname(socket.gethostname())) + socket.inet_aton('0.0.0.0'))
+    # gethostname() doesn't return a valid name on the chumby (none)
+    # which triggers an error when calling gethostbyname
+    # so removed it
+    #self.socket.setsockopt(socket.SOL_IP, socket.IP_MULTICAST_IF, socket.inet_aton(socket.gethostbyname(socket.gethostname())) + socket.inet_aton('0.0.0.0'))
+    self.socket.setsockopt(socket.SOL_IP, socket.IP_MULTICAST_IF, socket.inet_aton('0.0.0.0'))
+    
     self.socket.setsockopt(socket.SOL_IP, socket.IP_ADD_MEMBERSHIP, socket.inet_aton(_MDNS_ADDR) + socket.inet_aton('0.0.0.0'))
     self.socket.settimeout(0.1)
   # end def
