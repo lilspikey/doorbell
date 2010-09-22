@@ -1,0 +1,3 @@
+#!/bin/sh
+cd /mnt/usb/
+./python doorbell.py $(ls /dev/ttyUSB*) &
