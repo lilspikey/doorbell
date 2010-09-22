@@ -4,7 +4,7 @@ import serial
 from socket import socket, AF_INET, SOCK_DGRAM
 import sys
 
-def send_grow_notification(password=None):
+def send_growl_notification(password=None):
     reg = GrowlRegistrationPacket(password=password)
     reg.addNotification()
     
@@ -26,7 +26,7 @@ def listen_on_serial_port(port):
             if line is not None:
                 line = line.strip()
             if line == 'DING DONG':
-                send_grow_notification()
+                send_growl_notification()
     finally:
         if ser:
             ser.close()
