@@ -38,7 +38,7 @@ class PicoRendezvous(UDPServer):
     except:
       pass
     tenths = 0
-    while tenths < 20:
+    while tenths < 100:
       self.handle_request()
       tenths = tenths + 1
     return self.replies
