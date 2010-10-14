@@ -1,0 +1,3 @@
+-e git://github.com/kfdm/gntp.git@5283e4994b3bfa89a0e9488a8e43481ac305c262#egg=gntp-0.2-py2.5-dev
+pyserial==2.5
+

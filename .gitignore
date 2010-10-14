@@ -3,4 +3,5 @@
 /bin
 /include
 /pip-log.txt
+/src
 *.pyc

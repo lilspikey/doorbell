@@ -1,16 +1,19 @@
 from PicoRendezvous import PicoRendezvous
 from netgrowl import GrowlRegistrationPacket, GrowlNotificationPacket, GROWL_UDP_PORT
+from gntp.notifier import GrowlNotifier
 import serial
 from socket import socket, AF_INET, SOCK_DGRAM
 import sys
 import time
 
 class Network(object):
+    title = 'Ding-Dong'
+    description = 'Someone is at the door'
+    password = None
     
     def __init__(self):
         self.growl_ips = []
         self.gntp_ips = []
-        self.password = None
     
     def _rendezvous(self, service):
         pr = PicoRendezvous()
@@ -38,8 +41,8 @@ class Network(object):
         reg = GrowlRegistrationPacket(password=self.password)
         reg.addNotification()
     
-        notify = GrowlNotificationPacket(title="Ding-Dong",
-                    description="Someone is at the door",
+        notify = GrowlNotificationPacket(title=self.title,
+                    description=self.description,
                     sticky=True, password=self.password)
         for ip in growl_ips:
             addr = (ip, GROWL_UDP_PORT)
@@ -55,8 +58,23 @@ class Network(object):
         gntp_ips = [ip for ip in gntp_ips if (ip not in growl_ips)]
         
         for ip in gntp_ips:
-            print 'gntp to: ', ip
-    
+            growl = GrowlNotifier(
+                applicationName = 'Doorbell',
+                notifications = ['doorbell'],
+                defaultNotifications = ['doorbell'],
+                hostname = ip,
+                password = self.password,
+            )
+            result = growl.register()
+            if not result:
+                continue
+            result = growl.notify(
+                noteType = 'doorbell',
+                title = self.title,
+                description = self.description,
+                sticky = True,
+            )
+
     def send_notification(self):
         '''
         send notification over the network
