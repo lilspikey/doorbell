@@ -14,3 +14,5 @@ Using netgrowl and PicoRendezvous from:
 
  * http://the.taoofmac.com/space/projects/netgrowl
  * http://the.taoofmac.com/space/projects/PicoRendezvous
+
+Also using http://github.com/kfdm/gntp for Growl for Windows notification
