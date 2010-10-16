@@ -33,5 +33,7 @@ Then copy the contents of dist/ onto a USB stick (along with python in python2.6
 
 http://wiki.chumby.com/mediawiki/index.php/Python
 
+The debugchumby script should startup the app when the chumby is rebooted.
+
 Of course this should all work on a "real" computer too.
 
