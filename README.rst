@@ -16,3 +16,22 @@ Using netgrowl and PicoRendezvous from:
  * http://the.taoofmac.com/space/projects/PicoRendezvous
 
 Also using http://github.com/kfdm/gntp for Growl for Windows notification
+
+Installation
+============
+
+If you want to run the Python part of this on a chumby, you should attach something that sends the string 'DING DONG' down the serial port (USB) of the chumby.
+
+On your computer (within doorbell directory):
+
+ * virtualenv --no-site-packages .
+ * source bin/activate
+ * pip install -r dependencies.txt
+ * ./build.sh
+ 
+Then copy the contents of dist/ onto a USB stick (along with python in python2.6-chumby/) and plug it into your chumby.  Python for the chumby is available here:
+
+http://wiki.chumby.com/mediawiki/index.php/Python
+
+Of course this should all work on a "real" computer too.
+
