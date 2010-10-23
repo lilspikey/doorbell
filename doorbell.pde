@@ -17,6 +17,7 @@
 #define DOORBELL_BACKWARD_ANGLE 90
 #define DOORBELL_FORWARD_ANGLE 180
 
+
 Servo servo;
 int state;
 unsigned long prev_millis;
@@ -24,6 +25,7 @@ unsigned int duration;
 unsigned int start_count;
 unsigned int ring_count;
 unsigned int finish_count;
+
 
 void next_state(int nstate, unsigned int nduration=0) {
   state = nstate;
@@ -34,6 +36,14 @@ void next_state(int nstate, unsigned int nduration=0) {
 void same_state() {
   prev_millis = millis();
   duration = 100;
+}
+
+void ring_bell() {
+  // ensure servo attached again
+  servo.attach(SERVO_PIN);
+  ring_count = 3;
+  Serial.println("DING DONG");
+  next_state(STATE_BELL_FORWARD);
 }
 
 void setup() {
@@ -47,7 +57,12 @@ void setup() {
 
 void loop() {
   if ( Serial.available() ) {
-    // TODO handle serial data 
+    char c = Serial.read();
+    
+    // run command
+    if ( c == 'T' ) {
+      ring_bell();
+    }
   }
   
   if ( (millis() - prev_millis) > duration ) {
@@ -63,11 +78,7 @@ void loop() {
         if ( v <= DOORBELL_THRESHOLD ) {
           start_count++;
           if ( start_count > 2 ) {
-            // ensure servo attached again
-            servo.attach(SERVO_PIN);
-            ring_count = 3;
-            Serial.println("DING DONG");
-            next_state(STATE_BELL_FORWARD);
+            ring_bell();
           }
           else {
             same_state();
