@@ -61,7 +61,9 @@ void loop() {
     
     // run command
     if ( c == 'T' ) {
-      ring_bell();
+      if ( state == STATE_WAITING ) {
+        ring_bell();
+      }
     }
   }
   
@@ -99,7 +101,7 @@ void loop() {
       case STATE_BELL_FORWARD: {
         if ( ring_count ) {
           servo.write(DOORBELL_FORWARD_ANGLE);
-          next_state(STATE_BELL_BACKWARD, 600);
+          next_state(STATE_BELL_BACKWARD, 500);
         }
         else {
           finish_count = 0;
@@ -110,7 +112,7 @@ void loop() {
       case STATE_BELL_BACKWARD: {
         servo.write(DOORBELL_BACKWARD_ANGLE);
         ring_count--;
-        next_state(STATE_BELL_FORWARD, 600);
+        next_state(STATE_BELL_FORWARD, 900);
       }
       break;
       case STATE_FINISH: {
